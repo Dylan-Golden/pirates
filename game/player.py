@@ -57,6 +57,7 @@ class Player (Context):
         self.verbs['debug'] = self
         self.verbs['map'] = self
         self.verbs['inventory'] = self
+        self.verbs['inv'] = self
         self.verbs['restock'] = self
         self.verbs['skills'] = self
 
@@ -94,7 +95,7 @@ class Player (Context):
             sys.exit(0)
         elif (verb == "map"):
             self.print_map ()
-        elif (verb == "inventory"):
+        elif (verb == "inventory" or verb == "inv"):
             self.print_inventory ()
         elif (verb == "debug"):
             announce ("home port is at:" + str(self.world.homex) + ", " + str(self.world.homey))

@@ -59,7 +59,7 @@ class Item(superclasses.ActionResolver, context.Context):
             if (action.action.gunshot == True):
                 self.discharge()
 
-
+        
 class Cutlass(Item):
     def __init__(self):
         super().__init__("cutlass", 5) #Note: price is in shillings (a silver coin, 20 per pound)
@@ -79,7 +79,25 @@ class BelayingPin(Item):
 class Flintlock(Item):
     def __init__(self):
         super().__init__("flintlock", 400) #Note: price is in shillings (a silver coin, 20 per pound)
-        self.damage = (10,100)
+        self.damage = (10,60)
+        self.firearm = True
+        self.charges = 1
+        self.skill = "guns"
+        self.verb = "shoot"
+        self.verb2 = "shoots"
+        
+class Mace(Item):
+    def __init__(self):
+        super().__init__("mace", 20)
+        self.damage = (15,45)
+        self.skill = "melee"
+        self.verb = "bash"
+        self.verb2 = "bashes"
+        
+class Musket(Item):
+    def __init__(self):
+        super().__init__("musket", 500)
+        self.damage = (30, 80)
         self.firearm = True
         self.charges = 1
         self.skill = "guns"
