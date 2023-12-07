@@ -15,7 +15,7 @@ class MyIsland(location.Location):
         self.locations = {}
         self.locations["Beach"] = Beach(self)
         self.locations["Volcano"] = Volcano(self)
-        self.locations["Burnt_city"] = Burnt_City(self)
+        self.locations["Burnt_City"] = Burnt_City(self)
         self.locations["Temple"] = Temple(self)
         self.locations["Obelisk"] = Obelisk(self)
         self.starting_location = self.locations["Beach"]
@@ -95,7 +95,7 @@ class Burnt_City(location.SubLocation):
         self.verbs['west'] = self
         #player more likely to get a spear
         self.possible_items = [items.Flintlock(), items.Spear(), items.Spear(), items.Mace(),  'Nothing']
-        self.city_item = self.possible_items[r.randint(0, 5)]
+        self.city_item = self.possible_items[r.randint(0, 6)]
         self.item_available = True
         self.medicine_available = True
         
@@ -187,7 +187,7 @@ class Obelisk(location.SubLocation):
         self.events.append(hell_hounds.Hell_Hounds())
         
         self.verbs['take'] = self
-        self.Obelisk_loot = items.Spear()
+        self.Obelisk_loot = items.Flintlock()
         
     def enter(self):
         announce ("you approach the Obelisk ")

@@ -65,8 +65,8 @@ class Ruins(location.SubLocation):
         self.verbs['south'] = self
    
         
-        #self.event_chance = 100
-        #self.events.append(skeletons.Skeletons())
+        self.event_chance = 100
+        self.events.append(skeletons.Skeletons())
         
     def enter(self): 
         announce ("you find and enter some old ruins.\nThere are some stairs that lead down to the north.")
@@ -138,9 +138,9 @@ class Vault(location.SubLocation):
         self.already_visited = False
     def enter(self):
         announce("After a long trek through the maze, you find youself before a large door with three pedistals next to it.")
+        announce('go north to interat with the door or south to leave. ')
         
     def process_verb(self, verb, cmd_list, nouns):
-        announce('go north to interat with the door or south to leave. ')
         if (verb == 'south'):
             config.the_player.next_loc = self.main_location.locations["Maze"]
         if (verb == 'north'):
@@ -154,12 +154,10 @@ class Vault(location.SubLocation):
                 if (self.player_solution == self.vault_solution):
                     self.already_visited = True
                     announce ("As you place the last Idol you a loud clunking noise and the door slowley slides out of the way.")
-                    Player.self.inventory.remove("Earth Idol")
-                    Player.self.inventory.remove("Fire Idol")
-                    Player.self.inventory.remove("Water Idol")
                     announce ("You enter the room the door was blocking and see and sword.")
                     announce ("You take the sword,  it feels overwhelmingly powerfull.")
                     item = self.best_sword
-                    config.the_player.add_to_inventory([item])
+                    config.the_player.add_to_inventory([item])  
             else:
                 announce("you already have been here.")
+                

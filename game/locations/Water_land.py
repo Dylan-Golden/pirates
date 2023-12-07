@@ -51,7 +51,7 @@ class Beach(location.SubLocation):
             config.the_player.next_loc = config.the_player.ship
             config.the_player.visiting = False
         if (verb == 'north'):
-            config.the_player.next_loc = self.main_location.locations["Volcano"]
+            config.the_player.next_loc = self.main_location.locations["Hotspring"]
         if (verb == 'east' or verb == 'west'):
             announce (f"you look {verb} the shoreline doesnt seem to end, you dont think it will be worth exploring.")
   
@@ -82,9 +82,9 @@ class Hotspring(location.SubLocation):
         if (verb == 'south'):
             config.the_player.next_loc = self.main_location.locations["Beach"]
         if (verb == 'east'):
-            announce ('A stream of lava is blocking the way.')
+            announce ('the mud is too deep to go that way.')
         if (verb == 'west'):
-            announce ("you force your party through the intense heat and end up near a burnt down city.")
+            announce ("you push through thcik mud and grass and find a village.")
             config.the_player.next_loc = self.main_location.locations["Swamp Village"]
         
     
@@ -169,7 +169,6 @@ class Wrecked_Ship(location.SubLocation):
                 announce ("you enter the the room and see a small idol statue sitting in a treasure chest.")
                 choice = str(input("What do you want to do: "))
                 if choice == 'take':
-                    announce ("You take the idol of the pedestal....\nNothing happend.")
                     announce ("After taking the idol you inspect and notice a water drop symbol on it.")
                     config.the_player.add_to_inventory([self.temple_item])
                     self.item_available = False
@@ -213,7 +212,7 @@ class Fountain(location.SubLocation):
                 at_least_one = True
                 
         if (verb == 'south'):
-            config.the_player.next_loc = self.main_location.locations["Volcano"]
+            config.the_player.next_loc = self.main_location.locations["Hotspring"]
     
 class Water_Idol(items.Item):
      def __init__(self):
