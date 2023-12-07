@@ -9,15 +9,15 @@ import random as r
 class MyIsland(location.Location):
     def __init__(self, x, y, world):
         super().__init__(x, y, world)
-        self.name = 'New york'
-        self.symbol = 'N'
+        self.name = 'Texas'
+        self.symbol = 'T'
         self.visitable = True
         self.locations = {}
         self.locations["Beach"] = Beach(self)
-        self.locations["Jungle"] = Jungle(self)
-        self.locations["City"] = City(self)
+        self.locations["Volcano"] = Volcano(self)
+        self.locations["Burnt_city"] = Burnt_City(self)
         self.locations["Temple"] = Temple(self)
-        self.locations["Cave"] = Cave(self)
+        self.locations["Obelisk"] = Obelisk(self)
         self.starting_location = self.locations["Beach"]
         
     def enter(self, ship):
@@ -51,78 +51,76 @@ class Beach(location.SubLocation):
             config.the_player.next_loc = config.the_player.ship
             config.the_player.visiting = False
         if (verb == 'north'):
-            config.the_player.next_loc = self.main_location.locations["Jungle"]
+            config.the_player.next_loc = self.main_location.locations["Volcano"]
         if (verb == 'east' or verb == 'west'):
             announce (f"you look {verb} the shoreline doesnt seem to end, you dont think it will be worth exploring.")
   
         
-class Jungle(location.SubLocation):
+class Volcano(location.SubLocation):
     def __init__(self, main_location):
         super().__init__(main_location)
-        self.name = "Jungle"
+        self.name = "Volcano"
         self.verbs['north'] = self
         self.verbs['south'] = self
         self.verbs['east'] = self
         self.verbs['west'] = self
         
-        self.event_chance = 40
-        self.events.append(man_eating_monkeys.ManEatingMonkeys())
-        
     def enter(self):
-        announce ("You enter the jungle on what seems to be a path.\nYou keep going until you reach what seems to be a split going east and west.")
+        announce ("You head to the only recognizable landmark, that being the base of a large volcano and see some narrow pathways leading somewhere.")
         
     def process_verb(self, verb, cmd_list, nouns):
         if (verb == 'north'):
-            announce ('The jungle is too thick for you to go that way.')
-        if (verb == 'south'):
-            config.the_player.next_loc = self.main_location.locations["Beach"]
-        if (verb == 'east'):
-            announce ("You see a dark cave with some extremly strong looking enemies.")
-            choice = str(input("Are you sure you want to go thier?(y/n)"))
+            announce ("You see a large obelisk being guarded by some strong enemies.")
+            choice = str(input("Are you sure you want to go thier?(y/n) "))
             if choice == 'n':
                 announce ("You head back to the split in the path.")
             elif choice == 'y':
-                config.the_player.next_loc = self.main_location.locations["Cave"]
+                config.the_player.next_loc = self.main_location.locations["Obelisk"]
+        if (verb == 'south'):
+            config.the_player.next_loc = self.main_location.locations["Beach"]
+        if (verb == 'east'):
+            announce ('A stream of lava is blocking the way.')
         if (verb == 'west'):
-            announce ("you push through the foliage until you end up in a big clearing and see what seems to be an old abandoned city.")
-            config.the_player.next_loc = self.main_location.locations["City"]
+            announce ("you force your party through the intense heat and end up near a burnt down city.")
+            config.the_player.next_loc = self.main_location.locations["Burnt_City"]
         
     
-class City(location.SubLocation):
+class Burnt_City(location.SubLocation):
     def __init__(self, main_location):
         super().__init__(main_location)
-        self.name = "City"
+        self.name = "Burnt_City"
         self.verbs['east'] = self
         self.verbs['north'] = self
         self.verbs['south'] = self
         self.verbs['west'] = self
-        self.possible_items = [items.Cutlass(), items.Flintlock(), items.Mace(), 'Nothing']
-        self.city_item = self.possible_items[r.randint(0, 3)]
+        #player more likely to get a spear
+        self.possible_items = [items.Flintlock(), items.Spear(), items.Spear(), items.Mace(),  'Nothing']
+        self.city_item = self.possible_items[r.randint(0, 5)]
         self.item_available = True
         self.medicine_available = True
         
         self.event_chance = 60
         self.events.append(man_eating_monkeys.ManEatingMonkeys())
-        self.events.append(drowned_pirates.DrownedPirates())
+        self.events.append(skeletons.Skeletons())
         
         
     def enter(self):
-        announce ("You enter the city, you see a large Temple to the north and some empty shops around you.")
+        announce ("You enter the burnt down city and are surround by piles of ember and remains of what resemble buildings.")
         
     def process_verb(self, verb, cmd_list, nouns):
         if (verb == 'east'):
-            announce ('You leave the city and headback to the jungle crossroads.')
-            config.the_player.next_loc = self.main_location.locations["Jungle"]
+            announce ('You leave and head back to the base of the Volcano.')
+            config.the_player.next_loc = self.main_location.locations["Volcano"]
         if (verb == 'west' and self.item_available == True):
             if self.city_item != 'Nothing':
-                announce (f"You enter a shop and see a {self.city_item.name}")
+                announce (f"You go to a large pile of rubble and see a {self.city_item.name}")
                 char_take = str(input("What do you want to do: "))
                 if char_take == 'leave':
-                    announce ("You leave the building.")
+                    announce ("You leave the rubble behind.")
                 elif char_take == 'take':   
                     config.the_player.add_to_inventory([self.city_item])   
                     self.item_available = False
-                    announce ('You take the mace and leave.')
+                    announce (f'You take the {self.city_item}  and leave.')
             else: 
                 announce ("You eneter a shop and see nothing of intrest.  You leave.")
                 self.item_available = False
@@ -132,7 +130,7 @@ class City(location.SubLocation):
               config.the_player.next_loc = self.main_location.locations["Temple"]
         if (verb == 'south'):
             if self.medicine_available == True:
-                announce ('you enter a small building and find some medicine.')
+                announce ('you search through a pile of embers and find some medicine')
                 config.the_player.ship.medicine += 1
                 self.medicine_available = False
             else:
@@ -149,12 +147,12 @@ class Temple(location.SubLocation):
         self.verbs['north'] = self
         self.verbs['south'] = self
         
-        self.temple_item = Earth_Idol()
+        self.temple_item = Fire_Idol()
         self.item_available = True
         
         self.event_chance = 60
-        self.events.append(man_eating_monkeys.ManEatingMonkeys())
-        self.events.append(drowned_pirates.DrownedPirates())
+        self.events.append(hell_hounds.Hell_Hounds())
+        self.events.append(skeletons.Skeletons())
         
     def enter(self):
         announce ("You enter the temple. There is one room to the north.")
@@ -162,7 +160,7 @@ class Temple(location.SubLocation):
     def process_verb(self, verb, cmd_list, nouns):
         if (verb == 'south'):
             announce ("You leave the temple and head back to the city.")
-            config.the_player.next_loc = self.main_location.locations["City"]
+            config.the_player.next_loc = self.main_location.locations["Burnt_City"]
         if (verb == 'north'):
             if self.item_available == True:
                 #make the player believe something bad will happen if they take it
@@ -170,52 +168,50 @@ class Temple(location.SubLocation):
                 choice = str(input("What do you want to do: "))
                 if choice == 'take':
                     announce ("You take the idol of the pedestal....\nNothing happend.")
-                    announce ("After taking the idol you inspect and notice a mountain like symbol inscribed on it.")
+                    announce ("After taking the idol you inspect and notice a firey looking symbol on it.")
                     config.the_player.add_to_inventory([self.temple_item])
                     self.item_available = False
             else:
                 announce ('Their is nothing else left here.')
             
         
-class Cave(location.SubLocation):
+class Obelisk(location.SubLocation):
     def __init__(self, main_location):
         super().__init__(main_location)
-        self.name = "Cave"
-        self.verbs['leave'] = self
+        self.name = "Obelisk"
         self.verbs['north'] = self
         self.verbs['south'] = self
         
         
         self.event_chance = 100
-        self.events.append(skeletons.Skeletons())
+        self.events.append(hell_hounds.Hell_Hounds())
         
         self.verbs['take'] = self
-        self.cave_loot = items.Musket()
+        self.Obelisk_loot = items.Spear()
         
     def enter(self):
-        announce ("you enter the cave. ")
-        if self.cave_loot != None:
-            announce ('There seems to be some loot in the cave!')
+        announce ("you approach the Obelisk ")
+        if self.Obelisk_loot != None:
+            announce ('You spot something at the base of the Obelisk!')
         
         
     def process_verb(self, verb, cmd_list, nouns):
         self.event_chance = 0
         at_least_one = False
-        item = self.cave_loot
+        item = self.Obelisk_loot
         if (verb == 'take'):
-            if self.cave_loot == None or at_least_one == True:
+            if self.Obelisk_loot == None or at_least_one == True:
                 announce ("their is nothing to take.")
             else:
-                announce ("you obtained a musket.")
+                announce ("you obtained a spear.")
                 config.the_player.add_to_inventory([item])
-                self.cave_loot = None
+                self.Obelisk_loot = None
                 config.the_player.go = True
                 at_least_one = True
                 
-        if (verb == 'south' or verb == 'leave'):
-            config.the_player.next_loc = self.main_location.locations["Jungle"]
+        if (verb == 'south'):
+            config.the_player.next_loc = self.main_location.locations["Volcano"]
     
-class Earth_Idol(items.Item):
+class Fire_Idol(items.Item):
      def __init__(self):
-        super().__init__("Earth Idol", 1000)
-        
+        super().__init__("Fire Idol", 1000)

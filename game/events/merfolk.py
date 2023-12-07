@@ -4,23 +4,23 @@ import game.combat as combat
 import game.superclasses as superclasses
 from game.display import announce
 
-class Skeletons(event.Event):
+class Merfolks(event.Event):
     
     def __init__(self):
-        self.name = "Skeleton ambush"
+        self.name = "Merfolk attack"
     
     def process(self,world):
         result = {}
-        result["message"] = "The skeltons are defeated."
+        result["message"] = "The merfolk are defeated."
         monsters = []
-        min = 6
-        uplim = 8
+        min = 3
+        uplim = 7
         n_appearing = random.randrange(min, uplim)
         n = 1
         while n <= n_appearing:
-            monsters.append(combat.Skeleton("Skeleton "+str(n)))
+            monsters.append(combat.Merfolk("Merfolk "+str(n)))
             n += 1
-        announce ("The crew was ambushed by a group of skeletons.")
+        announce ("The crew was attacked by a group of angry merfolk.")
         combat.Combat(monsters).combat()
         result["newevents"] = [ self ]
         return result

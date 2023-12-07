@@ -62,8 +62,8 @@ class Item(superclasses.ActionResolver, context.Context):
         
 class Cutlass(Item):
     def __init__(self):
-        super().__init__("cutlass", 5) #Note: price is in shillings (a silver coin, 20 per pound)
-        self.damage = (10,60)
+        super().__init__("cutlass", 80) #Note: price is in shillings (a silver coin, 20 per pound)
+        self.damage = (10,40)
         self.skill = "swords"
         self.verb = "slash"
         self.verb2 = "slashes"
@@ -71,7 +71,7 @@ class Cutlass(Item):
 class BelayingPin(Item):
     def __init__(self):
         super().__init__("belaying-pin", 1) #Note: price is in shillings (a silver coin, 20 per pound)
-        self.damage = (5,30)
+        self.damage = (1,20)
         self.skill = "melee"
         self.verb = "bash"
         self.verb2 = "bashes"
@@ -103,3 +103,19 @@ class Musket(Item):
         self.skill = "guns"
         self.verb = "shoot"
         self.verb2 = "shoots"
+
+class Spear(Item):
+    def __init__(self):
+        super().__init__("Spear", 200)
+        self.damage = (25, 50)
+        self.skill = "melee"
+        self.verb = "stab"
+        self.verb2 = "stabs"
+        
+class Dark_Drinker(Item):
+    def __init__(self):
+        super().__init__("Dark Drinker", 1000000)
+        self.damage = (150, 150)
+        self.skill = "melee"
+        self.verb = "slash"
+        self.verb = "slashes"

@@ -92,6 +92,20 @@ class Skeleton(Monster):
     def __init__ (self, name):
         attacks = {}
         attacks["slash"] = ["slashs",random.randrange(45,56), (5,15)]
-        attacks["shoot"] = ["shoots",random.randrange(35,51), (15,25)]
+        attacks["shoot"] = ["shoots",random.randrange(35,51), (20,30)]
         #7 to 19 hp, bite attack, 65 to 85 speed (100 is "normal")
-        super().__init__(name, random.randrange(7,18), attacks, 55 + random.randrange(-10,5))
+        super().__init__(name, random.randrange(7,15), attacks, 55 + random.randrange(-4,5))
+    
+class Hell_Hound(Monster):
+    def __init__(self, name):
+        attacks = {}
+        attacks["bite"] = ['bites',random.randrange(45,56), (5,15)]
+        attacks["laserate"] = ["laserate",random.randrange(35,40), (35,40)]
+        super().__init__(name, random.randrange(13,20), attacks, 120 + random.randrange(-15,16))
+        
+class Merfolk(Monster):
+    def __init__(self, name):
+        attacks = {}
+        attacks["stab"] = ['stabs',random.randrange(35,60), (25,45)]
+        attacks["slash"] = ["slashes",random.randrange(25,50), (5,40)]
+        super().__init__(name, random.randrange(8, 18), attacks, 45 + random.randrange(-10,11))
